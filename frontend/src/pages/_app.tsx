@@ -1,6 +1,23 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import '@radix-ui/themes/styles.css';
+import { Theme } from '@radix-ui/themes';
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+// export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+//   getLayout?: (page: any) => ReactNode;
+// };
+//
+// type AppPropsWithLayout = AppProps & {
+//   Component: NextPageWithLayout;
+// };
+
+function MyApp({ Component, pageProps }: any) {
+  const getLayout = Component.getLayout ?? ((page: any) => page);
+  return (
+    <>
+      <Theme>
+        <div>{getLayout(<Component {...pageProps} />)}</div>
+      </Theme>
+    </>
+  );
 }
+
+export default MyApp;
