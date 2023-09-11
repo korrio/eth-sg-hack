@@ -6,16 +6,16 @@ import "./base/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 
-contract xfair is DVDERC20("Fair profit bearing", "XFR") {
+contract xFair is DVDERC20("Fair profit bearing", "XFR") {
 
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
-    IERC20 public immutable dvdToken ;
+    IERC20 public immutable profitToken ;
     uint256 public manualMinted = 0;
 
 // initial token
-    constructor(IERC20 _dvdToken) {
-        dvdToken = _dvdToken;
+    constructor(IERC20 _profitToken) {
+        profitToken = _profitToken;
     }
 
 
@@ -32,12 +32,12 @@ contract xfair is DVDERC20("Fair profit bearing", "XFR") {
 
   function collect() external {
     uint256 amount = _prepareCollect(msg.sender);
-    dvdToken.safeTransfer(msg.sender, amount);
+    profitToken.safeTransfer(msg.sender, amount);
   }
 
   function distribute(uint256 _amount) external onlyOwner {
-    require(dvdToken.balanceOf(msg.sender) >= _amount, "XFR:: Profit: Insufficient");
-    dvdToken.safeTransferFrom(msg.sender, address(this), _amount);
+    require(profitToken.balanceOf(msg.sender) >= _amount, "XFR:: Profit: Insufficient");
+    profitToken.safeTransferFrom(msg.sender, address(this), _amount);
     _distributeDividends(_amount);
   }
 }

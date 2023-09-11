@@ -109,8 +109,8 @@ contract fairMaster is Ownable, ReentrancyGuard {
         paymentToken = _paymentToken;
         xfairToken = _xfairToken;
         //adjustable
-        dividendingBlockCount = 201600; //initial 7 days, blocktime 3s;
-        lockProcessBlockCount = 28800; // initial 1 day
+        dividendingBlockCount = 60480; //initial 7 days, blocktime 10s;
+        lockProcessBlockCount = 8640; // initial 1 day
         feePercentage = _profitFee; //5000000000000000; //5e15 = 0.05% of deposit tokens
         feeToDevPercentage = _percentageFeeToDev; //500000000000000000; //5e17 = 50% of 0.05 (0.025%) distribute to dev , the rest are minting xDVI to treasury
         feeTo = _fundWallet;
@@ -124,7 +124,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
         lastDisburseBlock = _startBlock;
 
         if (_finishBlockCount == 0) {
-            _finishBlockCount = 20736000; //initial 2 year, blocktime 3s;
+            _finishBlockCount = 3170880; //initial 2 year, blocktime 10s;
         }
         payoutPeriodBlockCount = _finishBlockCount;
 
@@ -142,7 +142,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
     function depositHolderShares(
         uint256 _amount,
         address holder
-    ) external nonReentrant {
+    ) external nonReentrant onlyOwner{
         require(
             isPoolReady(),
             "fairMaster::depositShares: Pool isn't ready to stake"
@@ -177,7 +177,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
     function removeHolderShares(
         uint256 _amount,
         address holder
-    ) external nonReentrant {
+    ) external nonReentrant onlyOwner {
         require(
             isEnablePool,
             "fairMaster::removeShares: Pool is disable to disburse profit"
@@ -420,7 +420,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
     function checkNotExceedShares(
         uint256 newshare
     ) public view returns (bool isNotExceed) {
-        isNotExceed = (getCurrenthares().add(newshare) < LimitShares);
+        isNotExceed = (getCurrenthares().add(newshare) <= LimitShares);
     }
 
     /*
