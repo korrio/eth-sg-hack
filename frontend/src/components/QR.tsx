@@ -3,6 +3,14 @@
 import React from 'react';
 import { useQRCode } from 'next-qrcode';
 import showToast from '@/utils/toast';
+import {
+  Alert,
+  Container,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+} from '@mui/material';
 
 interface qrProps {
   address: string;
@@ -17,10 +25,10 @@ interface qrProps {
 const QR = ({
   address,
   assestaddress,
-  exprietime,
+  // exprietime,
   amount,
   asset,
-  rate,
+  // rate,
   status,
 }: qrProps) => {
   const { Canvas } = useQRCode();
@@ -36,25 +44,26 @@ const QR = ({
   };
 
   return (
-    <>
-      <div className="rounded-lg flex flex-col pt-2.5 mb-3">
-        <label className="font-medium text-sm mb-2 text-center uppercase">
-          Status
-        </label>
-        <p className="text-2xl text-center mb-4 font-normal">
-          {status === 'watching' || 'new' ? 'Waiting for payment' : ''}
-        </p>
-        <label className="font-medium text-sm mb-2 text-center uppercase">
-          Total {asset} Amount
-        </label>
-        <p className="text-4xl text-center text-secondary-color font-normal">
-          {amount} {asset}
-        </p>
-        <div className="text-xs font-normal mt-2">
-          Exchange rate: 1 {asset} = {rate} Baht
-        </div>
-      </div>
-      <div className="my-6">
+    <Container maxWidth="sm">
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <Alert severity="warning">
+            Status —{' '}
+            {status === 'watching' || 'new' ? 'Waiting for payment' : ''}
+          </Alert>
+        </Grid>
+        <Grid item xs={12} display="flex" justifyContent="center">
+          <label className="font-medium text-sm mb-2 text-center uppercase">
+            Total {asset} Amount
+          </label>
+        </Grid>
+        <Grid item xs={12} display="flex" justifyContent="center">
+          <p className="text-4xl text-center text-secondary-color font-normal">
+            {amount} {asset}
+          </p>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} display="flex" justifyContent="center">
         <Canvas
           options={{
             margin: 4,
@@ -62,48 +71,43 @@ const QR = ({
           }}
           text={url}
         />
-        <p className="text-sm font-normal mt-4">
+      </Grid>
+      <Grid item xs={12} display="flex" justifyContent="center">
+        <Typography>
           Send only <b>{asset}</b> to this deposit address
-        </p>
-      </div>
-      <div className="rounded-lg flex flex-col text-left pt-2.5 pb-1.5 px-3 bg-pattern mb-3">
-        <div>
-          <label className="font-medium text-sm mb-2 text-neutral-400">
-            {asset} Deposit address
-          </label>
-          <div className="flex mb-2 justify-between">
-            <p className="text-sm break-all">{address}</p>
-            <button
-              className="hover:bg-gray-400 text-white font-bold px-4 rounded flex-none"
-              onClick={handleCopy}
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography color="gray">{asset} Deposit address</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <p className="text-sm break-all">{address}</p>
+          <IconButton onClick={handleCopy}>
+            <svg
+              className="h-5 w-5 text-white"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <svg
-                className="h-5 w-5 text-white"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="currentColor"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                {' '}
-                <path stroke="none" d="M0 0h24v24H0z" />{' '}
-                <rect x="8" y="8" width="12" height="12" rx="2" />{' '}
-                <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2" />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div>
-          <label className="font-medium text-sm mb-2 text-neutral-400">
-            Network
-          </label>
-          <p className="text-sm">Linea Chain</p>
-        </div>
-      </div>
-    </>
+              {' '}
+              <path stroke="none" d="M0 0h24v24H0z" />{' '}
+              <rect x="8" y="8" width="12" height="12" rx="2" />{' '}
+              <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2" />
+            </svg>
+          </IconButton>
+        </Stack>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography color="gray">Network</Typography>
+        <Typography>Linea Chain</Typography>
+      </Grid>
+    </Container>
   );
 };
 export default QR;

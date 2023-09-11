@@ -12,15 +12,40 @@ import {
 } from '@mui/material';
 import { TProduct } from '@/types/shop';
 import { Add, Remove } from '@mui/icons-material';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 type Props = {
   product: TProduct;
-  onOpen: any;
 };
 
 const Product: React.FC<Props> = (props) => {
-  const { product, onOpen } = props;
+  const router = useRouter();
+  const { product } = props;
   const [amount, setAmount] = useState(1);
+
+  async function onClick() {
+    const res = await axios.post(
+      `https://apis.finnwork.co/crypto/wallet/newrequestdeposit`,
+      {
+        merchantcode: 'mc00000003',
+        cusid: 'txlineasgd',
+        asset: 'USDC',
+        network: 59140,
+        amount: amount,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'depay-x-key': `${process.env.NEXT_PUBLIC_API_KEY_SUPERADMIN}`,
+        },
+      }
+    );
+    router.push({
+      pathname: `/payment/${res.data.id}`,
+    });
+  }
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -63,7 +88,7 @@ const Product: React.FC<Props> = (props) => {
               size="small"
               fullWidth
               variant="contained"
-              onClick={() => onOpen()}
+              onClick={() => onClick()}
             >
               Buy
             </Button>
