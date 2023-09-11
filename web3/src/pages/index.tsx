@@ -17,6 +17,22 @@ const Home = () => {
 
   const { profitBalance, currenthares, accDisbursed } = useFairmaster();
   const balance = useTokenBalance('XFAIR');
+  let shared = 0;
+  let rawProfitBalance = 0;
+  let estimatedProfit = 0;
+  if (balance) {
+    shared =
+      (parseInt(formatEther(balance)) / parseInt(formatEther(currenthares))) *
+      100;
+  }
+  if (balance) {
+    rawProfitBalance = parseInt(formatEther(profitBalance));
+  }
+
+  if (balance) {
+    estimatedProfit = rawProfitBalance / shared;
+  }
+
   useEffect(() => {
     const initializeProvider = async () => {
       if (window.ethereum) {
@@ -55,14 +71,7 @@ const Home = () => {
                 <div className="w-1/2 sm:block">
                   <div className="text-xs text-gray-500 lg:text-sm">Shared</div>
                   <div className="mt-1 text-xl text-gray-500 font-semibold lg:text-2xl">
-                    {/*                     ~
-                    {balance && currenthares
-                      ? (
-                          parseInt(formatEther(balance)) /
-                          parseInt(formatEther(currenthares))
-                        ).toFixed(2) * 100
-                      : ''}
-                    % */}
+                    ~{balance && currenthares ? shared.toFixed(2) : ''}%
                   </div>
                 </div>
               </div>
@@ -140,7 +149,7 @@ const Home = () => {
                   Profit To Be Distribute
                 </div>
                 <div className="mt-1 text-xl font-semibold lg:text-2xl">
-                  {profitBalance ? formatEther(profitBalance) : '0'}
+                  {rawProfitBalance}
                   <span className="text-xs font-normal text-gray-500 lg:text-sm">
                     USDC
                   </span>
@@ -153,11 +162,9 @@ const Home = () => {
                       Estimated Profit
                     </div>
                     <div className="mt-1 text-xl font-bold lg:text-2xl">
-                      {profitBalance
-                        ? parseInt(formatEther(profitBalance))
-                        : '0'}
+                      ~ {estimatedProfit?.toFixed(2)}
                       <span className="text-xs font-normal text-gray-500 lg:text-sm">
-                        %
+                        USDC
                       </span>
                     </div>
                   </div>
