@@ -25,14 +25,14 @@ contract fairMaster is Ownable, ReentrancyGuard {
         address indexed OldAddress,
         address indexed NewAddress
     );
-    event FeePiad(address indexed paidBy, uint256 amount);
-    event updateFee(uint256 depositFee);
+    event FeeDeduct(uint256 amount);
+    event updateFee(uint256 pecentageProfitFee);
     event updateFeeDistribution(uint256 pecentageFeeToDev);
     event DividendDistributed(uint256 amount);
-    event FeeWithdrawn(uint256 amount);
+    event FeeToDev(uint256 amount);
     event FeeToReserved(uint256 amount);
-    event MintToHolder(uint256 amount, address holder);
-    event BurnFromHolder(uint256 amount, address holder);
+    event MintToHolder(uint256 amount, address indexed holder);
+    event BurnFromHolder(uint256 amount, address indexed holder);
 
     event AdminWithdrawFee(uint256 amount);
     event SetEnable(bool _newStatus);
@@ -45,9 +45,9 @@ contract fairMaster is Ownable, ReentrancyGuard {
     uint256 public feePercentage;
     // The percentage of fee distribution to dev wallet
     uint256 public feeToDevPercentage;
-    // The address to collect the fees when a user staked
+    // The dev address to collect the fees when profit distribution
     address public feeTo;
-    // The address to collect the fees when a user staked
+    // The reserv address to collect the fees when profit distribution
     address public fairReserved;
     //Last distributed dividend block
     uint256 public lastDisburseBlock;
@@ -68,7 +68,8 @@ contract fairMaster is Ownable, ReentrancyGuard {
 
     uint256 public startPoolBlock;
     uint256 public payoutPeriodBlockCount;
-    uint256 public delayProcessBlockCount;
+    //lock before devidend disburse
+    uint256 public lockProcessBlockCount;
 
     mapping(address => UserInfo) public userInfo;
     struct UserInfo {
@@ -95,11 +96,11 @@ contract fairMaster is Ownable, ReentrancyGuard {
     ) external {
         require(
             !isInitialized,
-            "dividendMaster::initialize: Already initialized"
+            "fairdMaster::initialize: Already initialized"
         );
         require(
             msg.sender == VALUE_CHEF_DEPLOYER,
-            "DVD Minter::initialize: Not deployer"
+            "Fair Master::initialize: Not deployer"
         );
 
         // Make this contract initialized
@@ -109,7 +110,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
         xfairToken = _xfairToken;
         //adjustable
         dividendingBlockCount = 201600; //initial 7 days, blocktime 3s;
-        delayProcessBlockCount = 28800; // initial 1 day
+        lockProcessBlockCount = 28800; // initial 1 day
         feePercentage = _profitFee; //5000000000000000; //5e15 = 0.05% of deposit tokens
         feeToDevPercentage = _percentageFeeToDev; //500000000000000000; //5e17 = 50% of 0.05 (0.025%) distribute to dev , the rest are minting xDVI to treasury
         feeTo = _fundWallet;
@@ -144,20 +145,23 @@ contract fairMaster is Ownable, ReentrancyGuard {
     ) external nonReentrant {
         require(
             isPoolReady(),
-            "dividendMaster::depositShares: Pool isn't ready to stake"
+            "fairMaster::depositShares: Pool isn't ready to stake"
         );
         require(
             _amount > 0,
-            "dividendMaster::depositShares: Amount should more than 0"
+            "fairMaster::depositShares: Amount should more than 0"
         );
         require(
             checkNotExceedShares(_amount),
-            "dividendMaster::depositShares: Amount exceeds remain shares"
+            "fairMaster::depositShares: Amount exceeds remain shares"
         );
-        require(
-            !isInDepositLockPeriod(),
-            "dividendMaster::depositShares: Pool is temperaly lock before dividend distribution"
-        );
+        /*
+        by pass for demo
+        */
+        // require(
+        //     !isInEquiptyMintLockPeriod(),
+        //     "fairMaster::depositShares: Pool is temperaly lock before dividend distribution"
+        // );
         UserInfo storage user = userInfo[holder];
 
         // adjust shares balance
@@ -176,7 +180,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
     ) external nonReentrant {
         require(
             isEnablePool,
-            "dividendMaster::removeShares: Pool is disable to widthdraw"
+            "fairMaster::removeShares: Pool is disable to disburse profit"
         );
         UserInfo storage user = userInfo[holder];
         // adjust shares in case remarket transfer
@@ -185,25 +189,24 @@ contract fairMaster is Ownable, ReentrancyGuard {
         }
         require(
             _amount > 0,
-            "dividendMaster::removeShares: Amount should more than 0"
+            "fairMaster::removeShares: Amount should more than 0"
         );
 
         require(
             user.shares >= _amount,
-            "DVDMaster::removeShare: Insufficient balance"
+            "fairMaster::removeShare: Insufficient balance"
         );
         user.shares = user.shares.sub(_amount);
         user.lastestRemoveBlock = block.number;
 
         xfairToken.burn(holder, _amount);
-
         emit BurnFromHolder(_amount, holder);
     }
 
     /*
        Dividend pending for distribute 
     */
-    function dividendBalance() public view returns (uint256) {
+    function profitBalance() public view returns (uint256) {
         return paymentToken.balanceOf(address(this));
     }
 
@@ -217,8 +220,8 @@ contract fairMaster is Ownable, ReentrancyGuard {
     /*
      * @returns true in lock for gethering period
      */
-    function isInDepositLockPeriod() public view returns (bool lock) {
-        lock = (nextDisburse().sub(block.number) <= delayProcessBlockCount);
+    function isInEquiptyMintLockPeriod() public view returns (bool lock) {
+        lock = (nextDisburse().sub(block.number) <= lockProcessBlockCount);
     }
 
     function nextDisburse() public view returns (uint256) {
@@ -229,11 +232,16 @@ contract fairMaster is Ownable, ReentrancyGuard {
        Dividend be distributed to shareholders 
     */
     function distributeDividend() external nonReentrant onlyOwner {
-        require(
-            !isInDividingPeriod(),
-            "dividendMaster::distributeReward: Too early to distribute balance"
-        );
-        uint256 _dvdtodist = dividendBalance();
+
+        /*
+         by pass for demo
+        */
+        // require(
+        //     !isInDividingPeriod(),
+        //     "fairMaster::distributeProfit: Too early to distribute balance"
+        // );
+
+        uint256 _dvdtodist = profitBalance();
         require(
             _dvdtodist > 0,
             "dividendMaster::distributeReward: Dividend token amount must > 0"
@@ -261,7 +269,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
             );
             uint256 profitFee = _dvdtodist.sub(distAmount);
             pendingFees = pendingFees.add(profitFee);
-            emit FeePiad(msg.sender, profitFee);
+            emit FeeDeduct(profitFee);
         }
 
         lastDisburseBlock = block.number;
@@ -277,12 +285,12 @@ contract fairMaster is Ownable, ReentrancyGuard {
     function distributeFee() external nonReentrant onlyOwner {
         require(
             pendingFees >= 0,
-            "dividendMaster::collectFee: Insufficient balance"
+            "fairMaster::collectFee: Insufficient balance"
         );
         uint256 pfBalance = paymentToken.balanceOf(address(this));
         require(
             pfBalance >= 0,
-            "dividendMaster::collectFee: Insufficient balance"
+            "fairMaster::collectFee: Insufficient balance"
         );
 
         if (pendingFees >= pfBalance) {
@@ -296,7 +304,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
         pendingFees = 0;
 
         paymentToken.safeTransfer(feeTo, todev);
-        emit FeeWithdrawn(todev);
+        emit FeeToDev(todev);
         paymentToken.safeTransfer(fairReserved, toreserved);
         emit FeeToReserved(toreserved);
 
@@ -321,7 +329,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
             "dividendMaster::adminWithdraw: _amount should be higher than 0"
         );
         require(
-            _amount <= dividendBalance(),
+            _amount <= profitBalance(),
             "dividendMaster::adminWithdraw: _amount should be less than or equal the total remaining reward"
         );
         paymentToken.safeTransfer(msg.sender, _amount);
@@ -389,12 +397,12 @@ contract fairMaster is Ownable, ReentrancyGuard {
         uint256 _newCountBlock
     ) external onlyOwner {
         require(
-            _newCountBlock != delayProcessBlockCount,
+            _newCountBlock != lockProcessBlockCount,
             "dividendMaster::updateLockProcessPeriod: New lock period same old value"
         );
 
         // Set the dividend period as the block count
-        delayProcessBlockCount = _newCountBlock;
+        lockProcessBlockCount = _newCountBlock;
 
         emit updateLockPeriod(_newCountBlock);
     }
