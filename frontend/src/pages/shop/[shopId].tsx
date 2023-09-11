@@ -10,13 +10,10 @@ import Typography from '@mui/material/Typography';
 import Product from '@/components/Product';
 import { Grid } from '@mui/material';
 import Head from 'next/head';
-import QRCode from '@/components/QRCode';
 
 const ShopDetail = () => {
   const router = useRouter();
   const { shopId } = router.query;
-  const [selectedAmount, setSelectedAmount] = useState(1);
-  const [open, setOpen] = useState(false);
 
   const [shop, setShop] = useState<TShop>({
     description: '',
@@ -37,17 +34,8 @@ const ShopDetail = () => {
     }
   }, [shopId]);
 
-  function onClose() {
-    setOpen(false);
-  }
-
-  function onOpen() {
-    setOpen(true);
-  }
-
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {open && <QRCode open={open} onClose={onClose} amount={selectedAmount} />}
       <Head>
         <title>{shop.name}</title>
       </Head>
@@ -80,11 +68,7 @@ const ShopDetail = () => {
           {shop.products.map((product: TProduct, index: React.Key) => {
             return (
               <Grid key={index} item xs={3}>
-                <Product
-                  onOpen={onOpen}
-                  product={product}
-                  setSelectedAmount={setSelectedAmount}
-                />
+                <Product product={product} />
               </Grid>
             );
           })}

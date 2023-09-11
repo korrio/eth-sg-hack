@@ -35,21 +35,16 @@ type TMerchantData = {
 const QRCode: React.FC<Props> = (props) => {
   const router = useRouter();
   const { open, onClose, amount } = props;
-  const [reqid, setReqid] = useState<string>('');
   const [expiredTime, setExpiredTime] = useState('');
   const [merchantData, setMerchantData] = useState<TMerchantData | undefined>(
     undefined
   );
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
-  const usdcAdress = '0x48a37bFb684D39d2878c220951a2EF9545041164';
 
   useEffect(() => {
     if (merchantData) {
       const uuid = merchantData.id;
       const reqid_fromSlug = uuid.match(/[^/]*$/)![0];
-      console.log('reqid_fromSlug', reqid_fromSlug);
-      setReqid(reqid_fromSlug);
-
       const getDetails = async () => {
         const res = await axios.get(
           `https://apis.finnwork.co/crypto/wallet/receiptdeposit/${reqid_fromSlug}`,

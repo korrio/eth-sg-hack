@@ -17,13 +17,11 @@ import axios from 'axios';
 
 type Props = {
   product: TProduct;
-  setSelectedAmount: any;
-  onOpen: any;
 };
 
 const Product: React.FC<Props> = (props) => {
   const router = useRouter();
-  const { product, setSelectedAmount, onOpen } = props;
+  const { product } = props;
   const [amount, setAmount] = useState(1);
 
   async function onClick() {
@@ -43,7 +41,6 @@ const Product: React.FC<Props> = (props) => {
         },
       }
     );
-    console.log('res', res);
     router.push({
       pathname: `/payment/${res.data.id}`,
     });

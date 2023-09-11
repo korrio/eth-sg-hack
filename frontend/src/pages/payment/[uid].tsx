@@ -5,22 +5,6 @@ import axios from 'axios';
 import MainLayout from '@/layouts/MainLayout';
 import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 
-type TMerchantData = {
-  address: string;
-  amount: any;
-  assestaddress: string;
-  cusid: string;
-  hookurl: any;
-  id: string;
-  invoiceid: string;
-  isactive: boolean;
-  merchantcode: string;
-  network: number;
-  reqblock: number;
-  reqtime: any;
-  status: string;
-};
-
 const Payment = () => {
   const router = useRouter();
   const { uid } = router.query;
