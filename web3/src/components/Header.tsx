@@ -17,6 +17,7 @@ import {
 import { useMetaMask } from '@/hooks/useMetaMask';
 import { formatAddress } from '@/utils';
 import { config } from '@/lib/config';
+import { useTokenBalance } from '@/hooks/useTokenBalance';
 
 const products = [
   {
@@ -69,6 +70,7 @@ function classNames(...classes: any) {
 }
 
 const Header = () => {
+  const balance = useTokenBalance('USDC');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { wallet, connectMetaMask } = useMetaMask();
@@ -109,6 +111,7 @@ const Header = () => {
           )}
           <div className="ml-4 inline-flex items-center border border-blue-700 py-2 px-3 text-sm text-blue-700">
             {wallet.balance} ETH
+            {balance || ''}
           </div>
           {chainInfo.name}
           <div className="ml-3 inline-flex items-center text-blue-700">
