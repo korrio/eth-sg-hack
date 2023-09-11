@@ -16,7 +16,6 @@ import {
 } from '@heroicons/react/20/solid';
 import { useMetaMask } from '@/hooks/useMetaMask';
 import { formatAddress } from '@/utils';
-import { config } from '@/lib/config';
 import { useTokenBalance } from '@/hooks/useTokenBalance';
 import { formatEther } from 'ethers/lib/utils';
 
@@ -110,8 +109,8 @@ const Header = () => {
             </button>
           )}
           <div className="ml-4 inline-flex items-center border border-primary-color py-2 px-3 text-sm text-primary-color">
-            {wallet.balance} ETH
-            {balance ? formatEther(balance) : '-'}
+            {/* {wallet.balance} */}
+            {balance ? formatEther(balance) : '-'} USDC
           </div>
           <div className="ml-3 inline-flex items-center text-primary-color">
             {formatAddress(wallet.address)}
