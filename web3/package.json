@@ -9,7 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
+    "@metamask/sdk": "^0.6.1",
+    "@metamask/sdk-react": "^0.6.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "@types/underscore": "^1.11.9",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "babel-plugin-styled-components": "^2.1.4",
@@ -29,6 +34,7 @@
     "sweetalert2": "^11.7.22",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4",
+    "underscore": "^1.13.6",
     "yup": "^1.2.0"
   },
   "devDependencies": {
