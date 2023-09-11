@@ -18,6 +18,9 @@ export const useFairmaster = () => {
   const [accDisbursed, setAccDisbursed] = useState(
     ethers.utils.parseEther('0')
   );
+  const [remainShares, setRemainShares] = useState(
+    ethers.utils.parseEther('0')
+  );
 
   useEffect(() => {
     const checkProfitBalance = async () => {
@@ -56,9 +59,22 @@ export const useFairmaster = () => {
       return result;
     };
 
+    const checkRemainShares = async () => {
+      if (!wallet.address) {
+        return [];
+      }
+
+      const result = await xFairContract?.getRemainShares();
+      if (result) {
+        setRemainShares(result);
+      }
+      return result;
+    };
+
     checkProfitBalance();
     checkCurrenthares();
     checkAccDisbursed();
+    checkRemainShares();
   }, [wallet.address]);
 
   const distributeDividend = async () => {
@@ -80,10 +96,31 @@ export const useFairmaster = () => {
     }
   };
 
+  const depositHolderShares = async () => {
+    if (!wallet.address) {
+      return false;
+    }
+    try {
+      const response = await xFairContract?.depositHolderShares();
+      console.log(response);
+      toast.promise(response.wait(), {
+        loading: 'Claiming...',
+        success: `Your Profit has been collected`,
+        error: (error) => error,
+      });
+      return true;
+    } catch (error) {
+      toast.error(error?.message);
+      return false;
+    }
+  };
+
   return {
     profitBalance,
     currenthares,
     accDisbursed,
+    remainShares,
+    depositHolderShares,
     distributeDividend,
   };
 };
