@@ -1,118 +1,172 @@
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
+import BlankLayout from '@/components/layouts/BlankLayout';
+import { ReactElement } from 'react';
 
-const inter = Inter({ subsets: ['latin'] });
-
-export default function Home() {
+const Home = () => {
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <div className="container space-y-10 lg:space-y-20 mx-auto">
+        <section className="-m-4 flex flex-wrap">
+          <div className="w-full p-4 md:w-1/2">
+            <div className="h-full p-4 shadow-xl shadow-blue-700/10 lg:p-6">
+              <h2 className="mb-2 text-sm font-bold lg:mb-6 lg:text-base">
+                Your Assets
+              </h2>
+              <div>
+                <div className="text-xl font-semibold lg:text-2xl">
+                  0.00{' '}
+                  <span className="text-xs text-gray-500 lg:text-sm">xDVI</span>
+                </div>
+                <div className="mt-2 text-xs text-gray-300 lg:text-sm">
+                  ~ $0
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-full p-4 text-white md:w-1/2">
+            <div className="h-full bg-blue-700 p-4 text-white shadow-xl shadow-blue-700/10 lg:p-6">
+              <h2 className="mb-2 text-sm font-bold lg:mb-6 lg:text-base">
+                Your Rewards
+              </h2>
+              <div>
+                <div className="text-xl font-semibold lg:mt-6 lg:text-2xl">
+                  0.00 <span className="text-xs lg:text-sm">BTC</span>
+                </div>
+              </div>
+              <div className="mt-2">
+                <div className="text-xs text-white/60 lg:text-sm">
+                  Already claimed 0.00 BTC in total
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div>
+          <h2 className="text-2xl font-bold ">Stake DVI to earn BTCB</h2>
+          <div className="cursor-pointer space-y-8 border bg-white p-4 shadow-lg shadow-gray-500/5 lg:space-y-10 lg:p-6">
+            <div className="flex flex-wrap">
+              <div className="w-full md:w-1/2">
+                <div className="flex">
+                  <div className="mr-4 h-12 w-12 flex-shrink-0"></div>
+                  <div>
+                    <h2 className="text-xl font-semibold lg:text-2xl">
+                      Stake Index Pool
+                    </h2>
+                    <p className="text-xs">
+                      You have claimed 0.00 BTC from this pool
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 w-full md:mt-0 md:w-1/2">
+                <div className="lg:flex lg:justify-end">
+                  <div className="mr-4 inline-block bg-blue-50 py-[2px] px-1 text-sm font-bold text-blue-700">
+                    The next disburse in
+                  </div>
+                  <div className="font-semibold">
+                    0 days : 0 hours : 0 mins : 0 secs
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap">
+              <div className="hidden w-1/2 sm:block sm:w-1/3 lg:w-1/4">
+                <div className="truncate text-sm text-gray-500">
+                  Total Shares
+                </div>
+                <div className="mt-1 text-xl font-semibold lg:text-2xl">
+                  99,999.1844
+                  <span className="text-xs font-normal text-gray-500 lg:text-sm">
+                    xDVI
+                  </span>
+                </div>
+              </div>
+              <div className="w-1/2 sm:w-1/3 lg:w-1/4">
+                <div className="truncate text-sm text-gray-500">
+                  Dividend Distributed
+                </div>
+                <div className="mt-1 text-xl font-semibold lg:text-2xl">
+                  0.4871
+                  <span className="text-xs font-normal text-gray-500 lg:text-sm">
+                    BTC
+                  </span>
+                </div>
+              </div>
+              <div className="w-1/2 sm:w-1/3 lg:w-1/4">
+                <div className="truncate text-sm text-gray-500">
+                  Dividend To Be Distributed
+                </div>
+                <div className="mt-1 text-xl font-semibold lg:text-2xl">
+                  0.00
+                  <span className="text-xs font-normal text-gray-500 lg:text-sm">
+                    BTC
+                  </span>
+                </div>
+              </div>
+              <div className="mt-8 w-full border-t pt-6 lg:mt-0 lg:w-1/4 lg:border-t-0 lg:pt-0">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="truncate text-sm text-gray-500">
+                      Estimated Rewards
+                    </div>
+                    <div className="mt-1 text-xl font-bold lg:text-2xl text-gray-300">
+                      0
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-gray-50 p-4 lg:p-6">
+            <div className="flex flex-wrap space-y-4 md:space-y-0">
+              <div className="w-full md:w-1/2">
+                <div className="flex flex-wrap space-y-4 sm:space-y-0">
+                  <div className="w-full sm:w-1/2">
+                    <div className="truncate text-sm text-gray-500 md:mr-3">
+                      xDVI Staked
+                    </div>
+                    <div className="text-xl font-bold lg:text-2xl">0.00</div>
+                  </div>
+                  <div className="w-full self-center sm:w-1/2">
+                    <button
+                      type="button"
+                      className="w-full md:w-auto bg-blue-700 hover:bg-blue-600 border-transparent text-white disabled:bg-gray-300 disabled:text-white py-2 px-4 text-sm base-transition rounded-md border font-semibold leading-[22px] focus:outline-none disabled:pointer-events-none disabled:cursor-not-allowed"
+                    >
+                      Stake Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="w-full md:w-1/2">
+                <div className="flex flex-wrap space-y-4 sm:space-y-0">
+                  <div className="w-full sm:w-1/2">
+                    <div className="truncate text-sm text-gray-500 md:mr-3">
+                      Withdrawable Rewards
+                    </div>
+                    <div className="text-xl font-bold lg:text-2xl text-gray-300">
+                      0.00
+                    </div>
+                  </div>
+                  <div className="w-full self-center sm:w-1/2">
+                    <button
+                      type="button"
+                      className="w-full md:w-auto border-blue-700 hover:bg-blue-700 text-blue-700 hover:text-white disabled:border-gray-300 disabled:text-gray-300 py-2 px-4 text-sm base-transition rounded-md border font-semibold leading-[22px] focus:outline-none disabled:pointer-events-none disabled:cursor-not-allowed"
+                      disabled
+                    >
+                      Collect Yours
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </>
   );
-}
+};
+
+Home.getLayout = function getLayout(page: ReactElement) {
+  return <BlankLayout>{page}</BlankLayout>;
+};
+
+export default Home;
