@@ -91,7 +91,7 @@ export const useFairmaster = () => {
       });
       return true;
     } catch (error) {
-      toast.error(error?.message);
+      toast.error('Failed');
       return false;
     }
   };
@@ -110,7 +110,7 @@ export const useFairmaster = () => {
       });
       return true;
     } catch (error) {
-      toast.error(error?.message);
+      toast.error('Failed');
       return false;
     }
   };
