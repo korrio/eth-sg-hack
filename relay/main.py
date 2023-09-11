@@ -1,5 +1,5 @@
 from celery import Celery
-from depay import depay
+from div import div
 import pandas as pd
 import numpy as np
 import time
@@ -12,10 +12,10 @@ import time
 app = Celery('main', broker='redis://redis:6379/0')
 
 # bsc_apikey = ''
-linea_apikey = ''
-superadmin_apikey = ''
+linea_apikey = 'YI7NFRBFG6USD8QKYQDT8ZKSQFDTV5Y7KM'
+superadmin_apikey = '151f6467-5d34-4220-9e4f-59ae9d1640da'
 
-network = 97
+network = 59140
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
@@ -25,8 +25,8 @@ def setup_periodic_tasks(sender, **kwargs):
 
 @app.task
 def fetch_data(api_key_token, api_key):
-    listRequestDeposits_data_new = depay.listRequestDeposits(api_key, 'new')
-    listRequestDeposits_data_watching = depay.listRequestDeposits(api_key, 'watching')
+    listRequestDeposits_data_new = div.listRequestDeposits(api_key, 'new')
+    listRequestDeposits_data_watching = div.listRequestDeposits(api_key, 'watching')
     all_listRequestDeposits_data = listRequestDeposits_data_new + listRequestDeposits_data_watching
     # list to dataframe
     all_listRequestDeposits_data = pd.DataFrame(all_listRequestDeposits_data)
@@ -55,13 +55,13 @@ def fetch_data(api_key_token, api_key):
         filtered_list_watching = []
         for i in filtered_lists:
             if i['status'] == 'new':
-                depay.updateWatchDeposit(api_key, i['id'], 'watching')
+                div.updateWatchDeposit(api_key, i['id'], 'watching')
                 filtered_list.append(i)
 
             if i['status'] == 'watching':
                 now = pd.to_datetime(pd.to_datetime('now').strftime('%Y-%m-%d %H:%M:%S.%f')) + pd.Timedelta(hours=7)
                 if np.where(now.strftime('%Y-%m-%d %H:%M:%S.%f') > i['endtime'], True, False):
-                    depay.updateWatchDeposit(api_key, i['id'], 'expired')
+                    div.updateWatchDeposit(api_key, i['id'], 'expired')
                 else:
                     filtered_list_watching.append(i)
                     if len(filtered_list_watching) != 0:
@@ -73,7 +73,7 @@ def fetch_data(api_key_token, api_key):
                             # print(filtered_list_watching[0])
                             # print("now", pd.to_datetime('now').strftime('%Y-%m-%d %H:%M:%S.%f') , "endtime", str(filtered_list_watching[0]['endtime']))
                             print("--------------------------------------------------------------------------------------------------------------")
-                            check_deposits = depay.validate_transaction(filtered_list_watching[0]['assestaddress'], filtered_list_watching[0]['address'], filtered_list_watching[0]['reqblock'], api_key_token)
+                            check_deposits = div.validate_transaction(filtered_list_watching[0]['assestaddress'], filtered_list_watching[0]['address'], filtered_list_watching[0]['reqblock'], api_key_token)
                             print("check_deposits", check_deposits)
                             print("check_deposits != []", check_deposits != [])
                             print("check_deposits != 'Max rate limit reached, rate limit of 5/1sec applied'", check_deposits != 'Max rate limit reached, rate limit of 5/1sec applied')
@@ -81,7 +81,7 @@ def fetch_data(api_key_token, api_key):
                                 print("test", check_deposits != [] and check_deposits != 'Max rate limit reached, rate limit of 5/1sec applied')
                                 print("Deposit detected")
                                 print(check_deposits)
-                                depay.updateWatchDeposit(api_key, filtered_list_watching[0]['id'], 'watched')
+                                div.updateWatchDeposit(api_key, filtered_list_watching[0]['id'], 'watched')
                                 print("watched")
                                 print("merchantcode", filtered_list_watching[0]['merchantcode'])
                                 print("asset", check_deposits[0]['tokenSymbol'])
@@ -94,7 +94,7 @@ def fetch_data(api_key_token, api_key):
                                 print("trxhash", check_deposits[0]['hash'])
                                 print("status", 1)
                                 print("web3CommitDeposit")
-                                depay.web3CommitDeposit(api_key, filtered_list_watching[0]['merchantcode'], filtered_list_watching[0]['cusid'], check_deposits[0]['tokenSymbol'], filtered_list_watching[0]['network'], filtered_list_watching[0]['hookurl'], check_deposits[0]['value'], check_deposits[0]['hash'], 1)
+                                div.web3CommitDeposit(api_key, filtered_list_watching[0]['merchantcode'], filtered_list_watching[0]['cusid'], check_deposits[0]['tokenSymbol'], filtered_list_watching[0]['network'], filtered_list_watching[0]['hookurl'], check_deposits[0]['value'], check_deposits[0]['hash'], 1)
                                 filtered_list_watching.pop(0)
                                 print("web3CommitDeposit done")
                     else:

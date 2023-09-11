@@ -14,13 +14,19 @@ def get_data(url):
     return data
 
 def validate_transaction(contract_address, address, startblock, api_key_token):
-    url = "https://api-testnet.linea.build/api/api?module=account&action=tokentx&contractaddress={}&address={}&page=1&offset=5&startblock={}&sort=asc&apikey={}".format(contract_address,address,startblock,api_key_token)
+    url = "https://api-testnet.lineascan.build/api?module=account&action=tokentx&contractaddress={}&address={}&page=1&offset=5&startblock={}&sort=asc&apikey={}".format(contract_address,address,startblock,api_key_token)
+    print("url", url)
     data = get_data(url)
     print("validate_transaction", data)
     return data['result']
 
-def listRequestDeposits(api_key):
-    url = f"https://cryptoapis.finnwork.co/Wallet/listRequestDeposits"
+def listRequestDeposits(api_key, status=None):
+    if status == 'new': 
+        url = f"https://cryptoapis.finnwork.co/Wallet/listRequestDeposits?status=new"
+    elif status == 'watching': 
+        url = f"https://cryptoapis.finnwork.co/Wallet/listRequestDeposits?status=watching"
+    else:
+        url = f"https://cryptoapis.finnwork.co/Wallet/listRequestDeposits" 
     headers = {'Content-Type': 'application/json', 'depay-x-key': api_key}
     response = requests.get(url, headers=headers)
     return response.json()

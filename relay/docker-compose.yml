@@ -1,4 +1,5 @@
 version: '3'
+name: sgh2023
 services:
   redis:
     image: redis

@@ -16,8 +16,8 @@ import {
 } from '@heroicons/react/20/solid';
 import { useMetaMask } from '@/hooks/useMetaMask';
 import { formatAddress } from '@/utils';
-import { config } from '@/lib/config';
 import { useTokenBalance } from '@/hooks/useTokenBalance';
+import { formatEther } from 'ethers/lib/utils';
 
 const products = [
   {
@@ -74,7 +74,6 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { wallet, connectMetaMask } = useMetaMask();
-  const chainInfo = config['0xe704'];
 
   // const walletChainSupported = isSupportedNetwork(wallet.chainId);
   // const chainInfo = isSupportedNetwork(networkId) ? config[networkId] : config['0xe704'];
@@ -109,12 +108,11 @@ const Header = () => {
               Connect MetaMask
             </button>
           )}
-          <div className="ml-4 inline-flex items-center border border-blue-700 py-2 px-3 text-sm text-blue-700">
-            {wallet.balance} ETH
-            {balance || ''}
+          <div className="ml-4 inline-flex items-center border border-primary-color py-2 px-3 text-sm text-primary-color">
+            {/* {wallet.balance} */}
+            {balance ? formatEther(balance) : '-'} USDC
           </div>
-          {chainInfo.name}
-          <div className="ml-3 inline-flex items-center text-blue-700">
+          <div className="ml-3 inline-flex items-center text-primary-color">
             {formatAddress(wallet.address)}
           </div>
         </div>
