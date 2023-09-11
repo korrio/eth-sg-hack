@@ -6,6 +6,7 @@ import '@/styles/globals.css';
 
 import Head from 'next/head';
 import { MetaMaskContextProvider } from '@/hooks/useMetaMask';
+import { Toaster } from 'react-hot-toast';
 
 // export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 //   getLayout?: (page: ReactElement) => ReactNode;
@@ -23,6 +24,7 @@ function MyApp({ Component, pageProps }: any) {
       <Head>
         <title>DIVPAY</title>
       </Head>
+      <Toaster position="top-center" reverseOrder={false} />
       <div>{getLayout(<Component {...pageProps} />)}</div>
     </MetaMaskContextProvider>
   );

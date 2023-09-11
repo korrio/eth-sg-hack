@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useContract } from './useContract';
 import { useMetaMask } from './useMetaMask';
 import { ethers } from 'ethers';
+import toast from 'react-hot-toast';
 
 export const useFairmaster = () => {
   const xFairContract = useContract('FAIR_MASTER');
@@ -60,22 +61,21 @@ export const useFairmaster = () => {
     checkAccDisbursed();
   }, [wallet.address]);
 
-  const collect = async () => {
+  const distributeDividend = async () => {
     if (!wallet.address) {
       return false;
     }
-    console.log('dddddd');
     try {
-      const response = await xFairContract?.collect();
+      const response = await xFairContract?.distributeDividend();
       console.log(response);
-      // toast.promise(response.wait(), {
-      //   loading: 'Claiming...',
-      //   success: `Your Reward has beec claimed. (<a href="https://bscscan.com/tx/${response.hash}">View your transaction</a>)`,
-      //   error: (error) => error,
-      // });
+      toast.promise(response.wait(), {
+        loading: 'Claiming...',
+        success: `Your Profit has been collected`,
+        error: (error) => error,
+      });
       return true;
     } catch (error) {
-      // toast.error(error.message);
+      toast.error(error?.message);
       return false;
     }
   };
@@ -84,6 +84,6 @@ export const useFairmaster = () => {
     profitBalance,
     currenthares,
     accDisbursed,
-    collect,
+    distributeDividend,
   };
 };

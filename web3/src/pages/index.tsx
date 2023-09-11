@@ -12,10 +12,10 @@ const Home = () => {
     cumulativeDividendsOf,
     withdrawnDividendsOf,
     withdrawableDividendsOf,
+    collect,
   } = useXFair();
 
-  const { profitBalance, currenthares, accDisbursed, collect } =
-    useFairmaster();
+  const { profitBalance, currenthares, accDisbursed } = useFairmaster();
   const balance = useTokenBalance('XFAIR');
 
   useEffect(() => {
