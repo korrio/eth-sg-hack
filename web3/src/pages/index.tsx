@@ -48,7 +48,11 @@ const Home = () => {
                 </div>
                 <div className="mt-2 text-xs text-gray-300 lg:text-sm">
                   <span className="text-xs text-gray-500 lg:text-sm">XFR</span>
-                  $0%
+                  {balance
+                    ? (parseInt(formatEther(balance)) /
+                        parseInt(formatEther(currenthares))) *
+                      100
+                    : ''}
                 </div>
               </div>
             </div>
@@ -92,16 +96,6 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div className="mt-6 w-full md:mt-0 md:w-1/2">
-                <div className="lg:flex lg:justify-end">
-                  <div className="mr-4 inline-block bg-blue-50 py-[2px] px-1 text-sm font-bold text-primary-color">
-                    The next disburse in
-                  </div>
-                  <div className="font-semibold">
-                    0 days : 0 hours : 0 mins : 0 secs
-                  </div>
-                </div>
-              </div>
             </div>
             <div className="flex flex-wrap">
               <div className="hidden w-1/2 sm:block sm:w-1/3 lg:w-1/4 hidden">
@@ -109,7 +103,9 @@ const Home = () => {
                   Total Equity
                 </div>
                 <div className="mt-1 text-xl font-semibold lg:text-2xl">
-                  {currenthares ? formatEther(currenthares) : '0'}
+                  {currenthares
+                    ? parseInt(formatEther(currenthares)).toFixed(4)
+                    : '0'}
                   <span className="text-xs font-normal text-gray-500 lg:text-sm">
                     xDVI
                   </span>
@@ -120,7 +116,9 @@ const Home = () => {
                   Profit Distributed
                 </div>
                 <div className="mt-1 text-xl font-semibold lg:text-2xl">
-                  {accDisbursed ? formatEther(accDisbursed) : '0'}
+                  {accDisbursed
+                    ? parseInt(formatEther(accDisbursed)).toFixed(4)
+                    : '0'}
                   <span className="text-xs font-normal text-gray-500 lg:text-sm">
                     USDC
                   </span>
@@ -131,9 +129,7 @@ const Home = () => {
                   Profit To Be Distribute
                 </div>
                 <div className="mt-1 text-xl font-semibold lg:text-2xl">
-                  {withdrawableDividendsOf
-                    ? formatEther(withdrawableDividendsOf)
-                    : '0'}
+                  {profitBalance ? formatEther(profitBalance) : '0'}
                   <span className="text-xs font-normal text-gray-500 lg:text-sm">
                     USDC
                   </span>
@@ -146,7 +142,9 @@ const Home = () => {
                       Estimated Profit
                     </div>
                     <div className="mt-1 text-xl font-bold lg:text-2xl">
-                      {profitBalance ? formatEther(profitBalance) : '0'}
+                      {profitBalance
+                        ? parseInt(formatEther(profitBalance))
+                        : '0'}
                       <span className="text-xs font-normal text-gray-500 lg:text-sm">
                         USDC
                       </span>
