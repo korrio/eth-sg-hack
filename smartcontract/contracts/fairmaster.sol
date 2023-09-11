@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./base/SafeERC20.sol";
 
-// Enhance V2 and can enable lock to prevent depositing berfor dividend distribute
+// Enhance From Divident master V3 remove deposit stake token, change stake fee to fee on distributed
 contract fairMaster is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
@@ -30,7 +30,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
     event updateFeeDistribution(uint256 pecentageFeeToDev);
     event DividendDistributed(uint256 amount);
     event FeeWithdrawn(uint256 amount);
-    event MintToReserved(uint256 amount);
+    event FeeToReserved(uint256 amount);
     event MintToHolder(uint256 amount, address holder);
     event BurnFromHolder(uint256 amount, address holder);
 
@@ -72,7 +72,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
 
     mapping(address => UserInfo) public userInfo;
     struct UserInfo {
-        uint256 shares; // How many staked tokens the user has provided and recieved devidend (xDVI)
+        uint256 shares; // xfair tokens that user hold
         uint256 lastestStakeBlock;
         uint256 lastestRemoveBlock;
     }
@@ -163,21 +163,11 @@ contract fairMaster is Ownable, ReentrancyGuard {
         // adjust shares balance
         user.shares = xfairToken.balanceOf(msg.sender);
 
-        uint256 sharesAmount = _amount;
-        if (feePercentage > 0) {
-            sharesAmount = _amount.mul(uint256(1e18).sub(feePercentage)).div(
-                1e18
-            );
-            uint256 profitFee = _amount.sub(sharesAmount);
-            pendingFees = pendingFees.add(depositFee);
-            emit FeePiad(msg.sender, depositFee);
-        }
-
-        xfairToken.mint(holder, sharesAmount);
+        xfairToken.mint(holder, _amount);
         user.lastestStakeBlock = block.number;
-        user.shares = user.shares.add(sharesAmount);
-        currentShares = currentShares.add(sharesAmount);
-        emit MintToHolder(sharesAmount, holder);
+        user.shares = user.shares.add(_amount);
+        currentShares = currentShares.add(_amount);
+        emit MintToHolder(_amount, holder);
     }
 
     function removeHolderShares(
@@ -263,11 +253,21 @@ contract fairMaster is Ownable, ReentrancyGuard {
                 );
             }
         }
+        // in case of operational fee
+        uint256 distAmount = _dvdtodist;
+        if (feePercentage > 0) {
+            distAmount = _dvdtodist.mul(uint256(1e18).sub(feePercentage)).div(
+                1e18
+            );
+            uint256 profitFee = _dvdtodist.sub(distAmount);
+            pendingFees = pendingFees.add(profitFee);
+            emit FeePiad(msg.sender, profitFee);
+        }
 
         lastDisburseBlock = block.number;
-        accDisbursed = accDisbursed.add(_dvdtodist);
-        xfairToken.distribute(_dvdtodist);
-        emit DividendDistributed(_dvdtodist);
+        accDisbursed = accDisbursed.add(distAmount);
+        xfairToken.distribute(distAmount);
+        emit DividendDistributed(distAmount);
     }
 
     /** 
@@ -279,27 +279,30 @@ contract fairMaster is Ownable, ReentrancyGuard {
             pendingFees >= 0,
             "dividendMaster::collectFee: Insufficient balance"
         );
-        uint256 stkBalance = stakedToken.balanceOf(address(this));
+        uint256 pfBalance = paymentToken.balanceOf(address(this));
         require(
-            stkBalance >= 0,
+            pfBalance >= 0,
             "dividendMaster::collectFee: Insufficient balance"
         );
 
-        if (pendingFees >= stkBalance) {
-            pendingFees = stkBalance;
+        if (pendingFees >= pfBalance) {
+            pendingFees = pfBalance;
         }
         uint256 todev = pendingFees
             .mul(uint256(1e18).sub(feeToDevPercentage))
             .div(1e18);
         uint256 toreserved = pendingFees.sub(todev);
 
-        stakedToken.safeTransfer(feeTo, todev);
-        emit FeeWithdrawn(todev);
-
-        xfairToken.mint(fairReserved, toreserved);
-        emit MintToReserved(toreserved);
-
         pendingFees = 0;
+
+        paymentToken.safeTransfer(feeTo, todev);
+        emit FeeWithdrawn(todev);
+        paymentToken.safeTransfer(fairReserved, toreserved);
+        emit FeeToReserved(toreserved);
+
+        /// incase of converse profit to xfair equipty token
+        //xfairToken.mint(fairReserved, toreserved);
+        //emit MintToReserved(toreserved);
     }
 
     /**
@@ -397,19 +400,26 @@ contract fairMaster is Ownable, ReentrancyGuard {
     }
 
     /*
+     * @notice profit payment balance
+     */
+    function getCurrenthares() public view returns (uint256) {
+        return currentShares;
+    }
+
+    /*
      * @notice shares limit is exceed or not
      */
     function checkNotExceedShares(
         uint256 newshare
     ) public view returns (bool isNotExceed) {
-        isNotExceed = (depositedBalance().add(newshare) < LimitShares);
+        isNotExceed = (getCurrenthares().add(newshare) < LimitShares);
     }
 
     /*
      * @notice get shares remain in pool
      */
     function getRemainShares() public view returns (uint256 remain) {
-        remain = LimitShares.sub(depositedBalance());
+        remain = LimitShares.sub(getCurrenthares());
     }
 
     /*
@@ -439,12 +449,12 @@ contract fairMaster is Ownable, ReentrancyGuard {
     }
 
     function setReservedTo(address _newAddress) external onlyOwner {
-        address _oldAddress = dviReserved;
+        address _oldAddress = fairReserved;
         require(
             _newAddress != _oldAddress,
             "dividendMaster::setFeeTo: New Reserved Address same old value"
         );
-        dviReserved = _newAddress;
+        fairReserved = _newAddress;
 
         emit SetFeeToReserved(_oldAddress, _newAddress);
     }
@@ -466,7 +476,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
             "dividendMaster::updateFeePercentage: Fee percentage exceed"
         );
 
-        depositPercentage = _feePercentage;
+        feePercentage = _feePercentage;
         emit updateFee(_feePercentage);
     }
 
