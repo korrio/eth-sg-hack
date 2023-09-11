@@ -23,11 +23,11 @@ const QRCode: React.FC<Props> = (props) => {
       <Divider />
       <DialogContent>
         <QR
-          address={'test'}
-          assestaddress={'test'}
+          address={''} // receiver
+          assestaddress={'test'} // usdc
           exprietime={new Date()}
           amount={100}
-          asset={'test'}
+          asset={'test'} // usdc
           rate={100}
           status={'test'}
         />
