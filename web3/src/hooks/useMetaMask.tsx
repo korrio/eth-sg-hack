@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   useState,
@@ -9,7 +10,6 @@ import {
 } from 'react';
 import { EventType, MetaMaskSDK } from '@metamask/sdk';
 import { formatBalance } from '@/utils';
-import _ from 'underscore';
 
 interface WalletState {
   accounts: any[];
@@ -42,7 +42,8 @@ const disconnectedState: WalletState = {
 const MetaMaskContext = createContext<MetaMaskContextData>(
   {} as MetaMaskContextData
 );
-let _initialized = false;
+
+// const _initialized = false;
 
 export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const [sdk, setSDK] = useState<MetaMaskSDK>();
@@ -116,7 +117,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     if (!sdk) return;
 
     console.debug(`setup provider listener`);
-    const onProviderEvent = async (accounts) => {
+    const onProviderEvent = async (accounts: any) => {
       console.debug(`onProviderEvent: `, accounts);
       if (accounts) {
         setSdkConnected(true);

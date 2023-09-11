@@ -1,24 +1,10 @@
 export const config = {
-  '0x13881': {
-    name: 'Mumbai',
-    contractAddress: '',
-    symbol: 'MATIC',
-    blockExplorer: 'https://mumbai.polygonscan.com',
-    rpcUrl: 'https://rpc-mumbai.maticvigil.com',
-  },
   '0xe704': {
     name: 'Linea',
     contractAddress: '',
     symbol: 'LineaETH',
     blockExplorer: 'https://explorer.goerli.linea.build',
     rpcUrl: 'https://rpc.goerli.linea.build',
-  },
-  '0x5': {
-    name: 'Goerli',
-    contractAddress: '',
-    symbol: 'ETH',
-    blockExplorer: 'https://goerli.etherscan.io',
-    rpcUrl: 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
   },
 };
 
