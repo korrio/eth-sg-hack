@@ -77,7 +77,7 @@ export const useXFair = () => {
       });
       return true;
     } catch (error) {
-      toast.error(error?.message);
+      toast.error('Failed');
       return false;
     }
   };

@@ -17,7 +17,6 @@ const Home = () => {
 
   const { profitBalance, currenthares, accDisbursed } = useFairmaster();
   const balance = useTokenBalance('XFAIR');
-
   useEffect(() => {
     const initializeProvider = async () => {
       if (window.ethereum) {
@@ -35,24 +34,36 @@ const Home = () => {
   return (
     <>
       <div className="container space-y-10 lg:space-y-20 mx-auto">
-        <section className="-m-4 flex flex-wrap">
+        <section className="flex flex-wrap">
           <div className="w-full p-4 md:w-1/2">
             <div className="h-full p-4 shadow-xl shadow-blue-700/10 lg:p-6">
               <h2 className="mb-2 text-sm font-bold lg:mb-6 lg:text-base">
                 Your Assets
               </h2>
-              <div>
-                <div className="text-xl font-semibold lg:text-2xl">
-                  {balance ? formatEther(balance) : '-'}
-                  <span className="text-xs text-gray-500 lg:text-sm">XFR</span>
+              <div className="flex flex-wrap">
+                <div className="w-1/2 sm:block">
+                  <div className="truncate text-sm text-gray-500">Balance</div>
+                  <div className="mt-1 text-xl font-semibold lg:text-2xl">
+                    <div className="text-xl font-semibold lg:text-2xl">
+                      {balance ? formatEther(balance) : '-'}
+                      <span className="text-xs text-gray-500 lg:text-sm">
+                        XFR
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-2 text-xs text-gray-300 lg:text-sm">
-                  <span className="text-xs text-gray-500 lg:text-sm">XFR</span>
-                  {balance
-                    ? (parseInt(formatEther(balance)) /
-                        parseInt(formatEther(currenthares))) *
-                      100
-                    : ''}
+                <div className="w-1/2 sm:block">
+                  <div className="text-xs text-gray-500 lg:text-sm">Shared</div>
+                  <div className="mt-1 text-xl text-gray-500 font-semibold lg:text-2xl">
+                    {/*                     ~
+                    {balance && currenthares
+                      ? (
+                          parseInt(formatEther(balance)) /
+                          parseInt(formatEther(currenthares))
+                        ).toFixed(2) * 100
+                      : ''}
+                    % */}
+                  </div>
                 </div>
               </div>
             </div>
@@ -146,7 +157,7 @@ const Home = () => {
                         ? parseInt(formatEther(profitBalance))
                         : '0'}
                       <span className="text-xs font-normal text-gray-500 lg:text-sm">
-                        USDC
+                        %
                       </span>
                     </div>
                   </div>
