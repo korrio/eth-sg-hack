@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: Load Data Shop
+      author: siwakon.dev
+      changes:
+        - loadData:
+            catalogName: shop
+            columns:
+              - column:
+                  header: id
+                  name: id
+                  type: NUMERIC
+              - column:
+                  header: name
+                  name: name
+                  type: varchar
+              - column:
+                  header: description
+                  name: description
+                  type: varchar
+            commentLineStartsWith: //
+            encoding: UTF-8
+            file: data/shop.csv
+            quotchar: ''''
+            relativeToChangelogFile: true
+            schemaName: public
+            separator: ','
+            tableName: shop
+            usePreparedStatements: true
+#  - changeSet:
+#      id: Load Data Product
+#      author: siwakon.dev
+#      changes:
+#        - loadData:
+#            catalogName: product
+#            columns:
+#              - column:
+#                  header: id
+#                  name: id
+#                  type: NUMERIC
+#              - column:
+#                  header: name
+#                  name: name
+#                  type: varchar
+#              - column:
+#                  header: description
+#                  name: description
+#                  type: varchar
+#              - column:
+#                  header: img
+#                  name: img
+#                  type: varchar
+#              - column:
+#                  header: price
+#                  name: price
+#                  type: decimal(10,2)
+#              - column:
+#                  header: stock
+#                  name: stock
+#                  type: numeric
+#              - column:
+#                  header: shop_id
+#                  name: shop_id
+#                  type: numeric
+#              - column:
+#                  header: created_date
+#                  name: created_date
+#                  type: datetime
+#              - column:
+#                  header: updated_date
+#                  name: updated_date
+#                  type: datetime
+#            commentLineStartsWith: //
+#            encoding: UTF-8
+#            file: data/product.csv
+#            quotchar: ''''
+#            relativeToChangelogFile: true
+#            schemaName: public
+#            separator: ','
+#            tableName: product
+#            usePreparedStatements: true
