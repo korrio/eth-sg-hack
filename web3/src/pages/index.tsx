@@ -1,7 +1,24 @@
 import BlankLayout from '@/components/layouts/BlankLayout';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
+import { ethers } from 'ethers';
 
 const Home = () => {
+  const [provider, setProvider] = useState<any>(null);
+
+  useEffect(() => {
+    const initializeProvider = async () => {
+      if (window.ethereum) {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(
+          window.ethereum as any
+        );
+        setProvider(provider);
+      }
+    };
+
+    initializeProvider();
+  }, []);
+  console.log('provider', provider);
   return (
     <>
       <div className="container space-y-10 lg:space-y-20 mx-auto">
