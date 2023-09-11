@@ -1,7 +1,24 @@
 import BlankLayout from '@/components/layouts/BlankLayout';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
+import { ethers } from 'ethers';
 
 const Home = () => {
+  const [provider, setProvider] = useState<any>(null);
+
+  useEffect(() => {
+    const initializeProvider = async () => {
+      if (window.ethereum) {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(
+          window.ethereum as any
+        );
+        setProvider(provider);
+      }
+    };
+
+    initializeProvider();
+  }, []);
+  console.log('provider', provider);
   return (
     <>
       <div className="container space-y-10 lg:space-y-20 mx-auto">
@@ -14,34 +31,35 @@ const Home = () => {
               <div>
                 <div className="text-xl font-semibold lg:text-2xl">
                   0.00{' '}
-                  <span className="text-xs text-gray-500 lg:text-sm">xDVI</span>
+                  <span className="text-xs text-gray-500 lg:text-sm">XFR</span>
                 </div>
                 <div className="mt-2 text-xs text-gray-300 lg:text-sm">
-                  ~ $0
+                  <span className="text-xs text-gray-500 lg:text-sm">XFR</span>
+                  $0%
                 </div>
               </div>
             </div>
           </div>
           <div className="w-full p-4 text-white md:w-1/2">
-            <div className="h-full bg-blue-700 p-4 text-white shadow-xl shadow-blue-700/10 lg:p-6">
+            <div className="h-full bg-primary-color p-4 text-white shadow-xl shadow-blue-700/10 lg:p-6">
               <h2 className="mb-2 text-sm font-bold lg:mb-6 lg:text-base">
-                Your Rewards
+                Your Profit
               </h2>
               <div>
                 <div className="text-xl font-semibold lg:mt-6 lg:text-2xl">
-                  0.00 <span className="text-xs lg:text-sm">BTC</span>
+                  0.00 <span className="text-xs lg:text-sm">USDC</span>
                 </div>
               </div>
               <div className="mt-2">
                 <div className="text-xs text-white/60 lg:text-sm">
-                  Already claimed 0.00 BTC in total
+                  Already claimed 0.00 USDC in total
                 </div>
               </div>
             </div>
           </div>
         </section>
         <div>
-          <h2 className="text-2xl font-bold ">Stake DVI to earn BTCB</h2>
+          <h2 className="text-2xl font-bold ">Invest to earn USDC</h2>
           <div className="cursor-pointer space-y-8 border bg-white p-4 shadow-lg shadow-gray-500/5 lg:space-y-10 lg:p-6">
             <div className="flex flex-wrap">
               <div className="w-full md:w-1/2">
@@ -59,7 +77,7 @@ const Home = () => {
               </div>
               <div className="mt-6 w-full md:mt-0 md:w-1/2">
                 <div className="lg:flex lg:justify-end">
-                  <div className="mr-4 inline-block bg-blue-50 py-[2px] px-1 text-sm font-bold text-blue-700">
+                  <div className="mr-4 inline-block bg-blue-50 py-[2px] px-1 text-sm font-bold text-primary-color">
                     The next disburse in
                   </div>
                   <div className="font-semibold">
@@ -93,7 +111,7 @@ const Home = () => {
               </div>
               <div className="w-1/2 sm:w-1/3 lg:w-1/4">
                 <div className="truncate text-sm text-gray-500">
-                  Dividend To Be Distributed
+                  Profit To Be Distributed
                 </div>
                 <div className="mt-1 text-xl font-semibold lg:text-2xl">
                   0.00
@@ -106,7 +124,7 @@ const Home = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="truncate text-sm text-gray-500">
-                      Estimated Rewards
+                      Estimated Profit
                     </div>
                     <div className="mt-1 text-xl font-bold lg:text-2xl text-gray-300">
                       0
@@ -129,7 +147,7 @@ const Home = () => {
                   <div className="w-full self-center sm:w-1/2">
                     <button
                       type="button"
-                      className="w-full md:w-auto bg-blue-700 hover:bg-blue-600 border-transparent text-white disabled:bg-gray-300 disabled:text-white py-2 px-4 text-sm base-transition rounded-md border font-semibold leading-[22px] focus:outline-none disabled:pointer-events-none disabled:cursor-not-allowed"
+                      className="w-full md:w-auto bg-primary-color hover:bg-blue-600 border-transparent text-white disabled:bg-gray-300 disabled:text-white py-2 px-4 text-sm base-transition rounded-md border font-semibold leading-[22px] focus:outline-none disabled:pointer-events-none disabled:cursor-not-allowed"
                     >
                       Stake Now
                     </button>
@@ -140,7 +158,7 @@ const Home = () => {
                 <div className="flex flex-wrap space-y-4 sm:space-y-0">
                   <div className="w-full sm:w-1/2">
                     <div className="truncate text-sm text-gray-500 md:mr-3">
-                      Withdrawable Rewards
+                      Withdrawable Profit
                     </div>
                     <div className="text-xl font-bold lg:text-2xl text-gray-300">
                       0.00
@@ -149,7 +167,7 @@ const Home = () => {
                   <div className="w-full self-center sm:w-1/2">
                     <button
                       type="button"
-                      className="w-full md:w-auto border-blue-700 hover:bg-blue-700 text-blue-700 hover:text-white disabled:border-gray-300 disabled:text-gray-300 py-2 px-4 text-sm base-transition rounded-md border font-semibold leading-[22px] focus:outline-none disabled:pointer-events-none disabled:cursor-not-allowed"
+                      className="w-full md:w-auto border-primary-color hover:bg-primary-color text-primary-color hover:text-white disabled:border-gray-300 disabled:text-gray-300 py-2 px-4 text-sm base-transition rounded-md border font-semibold leading-[22px] focus:outline-none disabled:pointer-events-none disabled:cursor-not-allowed"
                       disabled
                     >
                       Collect Yours
