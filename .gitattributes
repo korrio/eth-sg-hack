@@ -1,1 +1,2 @@
 shop-api/demohackaton.jar filter=lfs diff=lfs merge=lfs -text
+shop-api/build/opt/demohackaton.jar filter=lfs diff=lfs merge=lfs -text
