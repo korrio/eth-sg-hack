@@ -94,10 +94,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
         uint256 _finishBlockCount,
         uint256 _limitShares
     ) external {
-        require(
-            !isInitialized,
-            "fairdMaster::initialize: Already initialized"
-        );
+        require(!isInitialized, "fairdMaster::initialize: Already initialized");
         require(
             msg.sender == VALUE_CHEF_DEPLOYER,
             "Fair Master::initialize: Not deployer"
@@ -142,7 +139,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
     function depositHolderShares(
         uint256 _amount,
         address holder
-    ) external nonReentrant onlyOwner{
+    ) external nonReentrant onlyOwner {
         require(
             isPoolReady(),
             "fairMaster::depositShares: Pool isn't ready to stake"
@@ -165,12 +162,13 @@ contract fairMaster is Ownable, ReentrancyGuard {
         UserInfo storage user = userInfo[holder];
 
         // adjust shares balance
-        user.shares = xfairToken.balanceOf(msg.sender);
 
         xfairToken.mint(holder, _amount);
         user.lastestStakeBlock = block.number;
         user.shares = user.shares.add(_amount);
         currentShares = currentShares.add(_amount);
+        user.shares = xfairToken.balanceOf(msg.sender);
+
         emit MintToHolder(_amount, holder);
     }
 
@@ -198,6 +196,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
         );
         user.shares = user.shares.sub(_amount);
         user.lastestRemoveBlock = block.number;
+        currentShares = currentShares.sub(_amount);
 
         xfairToken.burn(holder, _amount);
         emit BurnFromHolder(_amount, holder);
@@ -232,7 +231,6 @@ contract fairMaster is Ownable, ReentrancyGuard {
        Dividend be distributed to shareholders 
     */
     function distributeDividend() external nonReentrant onlyOwner {
-
         /*
          by pass for demo
         */
@@ -288,10 +286,7 @@ contract fairMaster is Ownable, ReentrancyGuard {
             "fairMaster::collectFee: Insufficient balance"
         );
         uint256 pfBalance = paymentToken.balanceOf(address(this));
-        require(
-            pfBalance >= 0,
-            "fairMaster::collectFee: Insufficient balance"
-        );
+        require(pfBalance >= 0, "fairMaster::collectFee: Insufficient balance");
 
         if (pendingFees >= pfBalance) {
             pendingFees = pfBalance;
