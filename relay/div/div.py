@@ -14,7 +14,7 @@ def get_data(url):
     return data
 
 def validate_transaction(contract_address, address, startblock, api_key_token):
-    url = "https://explorer.goerli.linea.build/api/api?module=account&action=tokentx&contractaddress={}&address={}&page=1&offset=5&startblock={}&sort=asc&apikey={}".format(contract_address,address,startblock,api_key_token)
+    url = "https://api-testnet.linea.build/api/api?module=account&action=tokentx&contractaddress={}&address={}&page=1&offset=5&startblock={}&sort=asc&apikey={}".format(contract_address,address,startblock,api_key_token)
     data = get_data(url)
     print("validate_transaction", data)
     return data['result']
