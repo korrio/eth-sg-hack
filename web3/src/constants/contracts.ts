@@ -1,6 +1,6 @@
 import ERC20Abi from './abis/ERC20.abi.json';
-import FAIRMasterAbi from './abis/FAIRMaster.abi.json';
 import XFAIRAbi from './abis/XFAIR.abi.json';
+import FAIRMasterAbi from './abis/FAIRM.abi.json';
 
 export const contracts: any = {
   USDC: {
