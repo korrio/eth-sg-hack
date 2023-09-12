@@ -30,7 +30,7 @@ const Home = () => {
   }
 
   if (balance) {
-    estimatedProfit = rawProfitBalance / shared;
+    estimatedProfit = rawProfitBalance * (shared / 100);
   }
 
   useEffect(() => {
