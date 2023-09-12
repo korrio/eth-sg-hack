@@ -1,0 +1,88 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create Shop
+      author: siwakon.dev
+      changes:
+        - createTable:
+            tableName: shop
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  incrementBy: 1
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: img
+                  type: varchar
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: Create Product
+      author: siwakon.dev
+      changes:
+        - createTable:
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  incrementBy: 1
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: img
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: price
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: stock
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shop_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+
+
