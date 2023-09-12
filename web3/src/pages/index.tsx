@@ -61,7 +61,9 @@ const Home = () => {
                   <div className="truncate text-sm text-gray-500">Balance</div>
                   <div className="mt-1 text-xl font-semibold lg:text-2xl">
                     <div className="text-xl font-semibold lg:text-2xl">
-                      {balance ? formatEther(balance) : '-'}
+                      {balance
+                        ? parseInt(formatEther(balance)).toFixed(2)
+                        : '-'}
                       <span className="text-xs text-gray-500 lg:text-sm">
                         XFR
                       </span>
@@ -85,7 +87,7 @@ const Home = () => {
               <div>
                 <div className="text-xl font-semibold lg:mt-6 lg:text-2xl">
                   {cumulativeDividendsOf
-                    ? formatEther(cumulativeDividendsOf)
+                    ? parseInt(formatEther(cumulativeDividendsOf)).toFixed(2)
                     : '0'}
                   <span className="text-xs lg:text-sm">USDC</span>
                 </div>
@@ -94,7 +96,7 @@ const Home = () => {
                 <div className="text-xs text-white/60 lg:text-sm">
                   Already claimed
                   {withdrawnDividendsOf
-                    ? formatEther(withdrawnDividendsOf)
+                    ? parseInt(formatEther(withdrawnDividendsOf)).toFixed(2)
                     : '0'}
                   USDC in total
                 </div>
@@ -124,7 +126,7 @@ const Home = () => {
                 </div>
                 <div className="mt-1 text-xl font-semibold lg:text-2xl">
                   {currenthares
-                    ? parseInt(formatEther(currenthares)).toFixed(4)
+                    ? parseInt(formatEther(currenthares)).toFixed(2)
                     : '0'}
                   <span className="text-xs font-normal text-gray-500 lg:text-sm">
                     xDVI
@@ -137,7 +139,7 @@ const Home = () => {
                 </div>
                 <div className="mt-1 text-xl font-semibold lg:text-2xl">
                   {accDisbursed
-                    ? parseInt(formatEther(accDisbursed)).toFixed(4)
+                    ? parseInt(formatEther(accDisbursed)).toFixed(2)
                     : '0'}
                   <span className="text-xs font-normal text-gray-500 lg:text-sm">
                     USDC
@@ -149,7 +151,7 @@ const Home = () => {
                   Profit To Be Distribute
                 </div>
                 <div className="mt-1 text-xl font-semibold lg:text-2xl">
-                  {rawProfitBalance}
+                  {rawProfitBalance.toFixed(2)}
                   <span className="text-xs font-normal text-gray-500 lg:text-sm">
                     USDC
                   </span>
@@ -185,7 +187,9 @@ const Home = () => {
                     </div>
                     <div className="text-xl font-bold lg:text-2xl text-gray-300">
                       {withdrawableDividendsOf
-                        ? formatEther(withdrawableDividendsOf)
+                        ? parseInt(
+                            formatEther(withdrawableDividendsOf)
+                          ).toFixed(2)
                         : '0'}
                     </div>
                   </div>
