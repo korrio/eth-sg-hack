@@ -21,7 +21,9 @@ const Dashboard = () => {
               </h2>
               <div>
                 <div className="text-xl font-semibold lg:text-2xl">
-                  {profitBalance ? formatEther(profitBalance) : '0'}
+                  {profitBalance
+                    ? parseInt(formatEther(profitBalance)).toFixed(2)
+                    : '0'}
                   <span className="text-xs text-gray-500 lg:text-sm">USDC</span>
                 </div>
                 <div className="w-full self-center sm:w-1/2">
@@ -43,7 +45,9 @@ const Dashboard = () => {
               </h2>
               <div>
                 <div className="text-xl font-semibold lg:text-2xl">
-                  {remainShares ? formatEther(remainShares) : '0'}
+                  {remainShares
+                    ? parseInt(formatEther(remainShares)).toFixed(2)
+                    : '0'}
                   <span className="text-xs text-gray-500 lg:text-sm">XFR</span>
                 </div>
               </div>
