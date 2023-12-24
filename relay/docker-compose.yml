@@ -3,8 +3,14 @@ name: sgh2023
 services:
   redis:
     image: redis
+    command: --port 6381
     ports:
-      - '6377:6379'
+      - '6381:6381'
+    expose:
+      - '6381'
+    volumes:
+      - type: volume
+        target: /data
     restart: always
   worker:
     build:
