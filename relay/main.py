@@ -9,7 +9,7 @@ import time
 
 # app = Celery('main', broker=BROKER_URL, backend=BACKEND_URL)
 
-app = Celery('main', broker='redis://redis:6379/0')
+app = Celery('main', broker='redis://redis:6381/0')
 
 bsc_apikey = 'IZSNGW8S3Q6UKB9JE95UNIXEQU3CYUY8JM'
 # linea_apikey = 'YI7NFRBFG6USD8QKYQDT8ZKSQFDTV5Y7KM'
