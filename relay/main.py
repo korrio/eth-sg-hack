@@ -11,16 +11,17 @@ import time
 
 app = Celery('main', broker='redis://redis:6379/0')
 
-# bsc_apikey = ''
-linea_apikey = 'YI7NFRBFG6USD8QKYQDT8ZKSQFDTV5Y7KM'
+bsc_apikey = 'IZSNGW8S3Q6UKB9JE95UNIXEQU3CYUY8JM'
+# linea_apikey = 'YI7NFRBFG6USD8QKYQDT8ZKSQFDTV5Y7KM'
 superadmin_apikey = '151f6467-5d34-4220-9e4f-59ae9d1640da'
 
-network = 59140
+# network = 59140
+network = 56
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
             
-    sender.add_periodic_task(10.0, fetch_data.s(linea_apikey, superadmin_apikey), name='add every 10')
+    sender.add_periodic_task(10.0, fetch_data.s(bsc_apikey, superadmin_apikey), name='add every 10')
             
 
 @app.task

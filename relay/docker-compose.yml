@@ -4,7 +4,7 @@ services:
   redis:
     image: redis
     ports:
-      - '6379:6379'
+      - '6377:6379'
     restart: always
   worker:
     build:
@@ -26,16 +26,16 @@ services:
       - redis
     restart: always
     command: celery -A main beat --loglevel=info
-  flower:
-    image: mher/flower
-    ports:
-      - '5555:5555'
-    environment:
-      - CELERY_BROKER=redis://redis:6379/0
-      - FLOWER_PORT=5555
-    depends_on:
-      - redis
-      - worker
-    restart: always
-    command: celery flower -A main --loglevel=info
+  # flower:
+    # image: mher/flower
+    # ports:
+      # - '5555:5555'
+    # environment:
+      # - CELERY_BROKER=redis://redis:6379/0
+      # - FLOWER_PORT=5555
+    # depends_on:
+      # - redis
+      # - worker
+    # restart: always
+    # command: celery flower -A main --loglevel=info
 
